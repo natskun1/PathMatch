@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body>
+    
+    <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+    </button>
+
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <a class="flex items-center space-x-3 rtl:space-x-reverse">
+              <img src="./PathMatchLOGO.png" class="h-8" alt="PathMatchLOGO" />
+              <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">PathMatch</span>
+          </a>
+          <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+              </svg>
+          </button>
+          <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+              <li>
+                <a href="./main.html" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Home</a>
+              </li>
+              <li>
+                <a href="./strands.html" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Strands Overview</a>
+              </li>
+              <li>
+                <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Course Finder</a>
+              </li>
+              <li>
+                <a href="./schools.html" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Univeristy Directory</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-8">
+        <style>
+            .text-with-border {
+                text-shadow: 
+                    -1px -1px 0 black,  
+                    1px -1px 0 black,
+                    -1px  1px 0 black,
+                    1px  1px 0 black;
+            }
+        </style>
+        <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-white md:text-5xl lg:text-6xl dark:text-white text-with-border text-center">Course Finder</h1>
+
+       <!-- STEM Courses Section -->
+    <div class="strand-section bg-white p-6 mb-6 rounded-lg shadow">
+    <h2 class="text-2xl text-blue-800">STEM (Science, Technology, Engineering, and Mathematics)</h2>
+    <p class="mt-4">The <strong>STEM (Science, Technology, Engineering, and Mathematics)</strong> strand in Senior High School is designed for students who are interested in fields that involve analytical thinking, problem-solving, and scientific exploration. Students who complete the STEM strand typically pursue college courses that align with their strengths in science and math.</p>
+    
+    <h3 class="text-xl mt-6">Possible College Courses for STEM Strand Students:</h3>
+
+    <!-- Engineering Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">1. Engineering Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Civil Engineering</li>
+            <li>Mechanical Engineering</li>
+            <li>Electrical Engineering</li>
+            <li>Electronics Engineering</li>
+            <li>Chemical Engineering</li>
+            <li>Aerospace Engineering</li>
+            <li>Industrial Engineering</li>
+            <li>Computer Engineering</li>
+            <li>Mining Engineering</li>
+            <li>Petroleum Engineering</li>
+            <li>Geological Engineering</li>
+            <li>Environmental Engineering</li>
+            <li>Biomedical Engineering</li>
+            <li>Agricultural Engineering</li>
+            <li>Materials Engineering</li>
+        </ul>
+    </div>
+
+    <!-- Science Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">2. Science Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Biology</li>
+            <li>Bachelor of Science in Chemistry</li>
+            <li>Bachelor of Science in Physics</li>
+            <li>Bachelor of Science in Environmental Science</li>
+            <li>Bachelor of Science in Microbiology</li>
+            <li>Bachelor of Science in Biochemistry</li>
+            <li>Bachelor of Science in Geology</li>
+            <li>Bachelor of Science in Forensic Science</li>
+            <li>Bachelor of Science in Agriculture (Agricultural Science, Crop Science, etc.)</li>
+            <li>Bachelor of Science in Marine Biology</li>
+            <li>Bachelor of Science in Astronomy and Astrophysics</li>
+        </ul>
+    </div>
+
+    <!-- Technology Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">3. Technology Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Information Technology (BSIT)</li>
+            <li>Bachelor of Science in Computer Science</li>
+            <li>Bachelor of Science in Software Engineering</li>
+            <li>Bachelor of Science in Data Science</li>
+            <li>Bachelor of Science in Cybersecurity</li>
+            <li>Bachelor of Science in Networking</li>
+            <li>Bachelor of Science in Game Development</li>
+            <li>Bachelor of Science in Artificial Intelligence</li>
+            <li>Bachelor of Science in Robotics</li>
+            <li>Bachelor of Science in Web Development</li>
+        </ul>
+    </div>
+
+    <!-- Health and Medical Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">4. Health and Medical Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Nursing</li>
+            <li>Bachelor of Science in Pharmacy</li>
+            <li>Bachelor of Science in Medical Technology</li>
+            <li>Bachelor of Science in Radiologic Technology</li>
+            <li>Bachelor of Science in Physical Therapy</li>
+            <li>Bachelor of Science in Occupational Therapy</li>
+            <li>Bachelor of Science in Public Health</li>
+            <li>Bachelor of Science in Nutrition and Dietetics</li>
+            <li>Bachelor of Science in Biostatistics</li>
+            <li>Bachelor of Science in Sports Science</li>
+            <li>Dentistry</li>
+            <li>Veterinary Medicine</li>
+        </ul>
+    </div>
+
+    <!-- Mathematics and Applied Mathematics Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">5. Mathematics and Applied Mathematics Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Mathematics</li>
+            <li>Bachelor of Science in Applied Mathematics</li>
+            <li>Bachelor of Science in Actuarial Science</li>
+            <li>Bachelor of Science in Statistics</li>
+            <li>Bachelor of Science in Financial Mathematics</li>
+        </ul>
+    </div>
+
+    <!-- Information Systems and Management Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">6. Information Systems and Management Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Information Systems</li>
+            <li>Bachelor of Science in Management Information Systems</li>
+            <li>Bachelor of Science in Business Analytics</li>
+            <li>Bachelor of Science in Supply Chain Management</li>
+            <li>Bachelor of Science in Computer Science and Business Administration</li>
+        </ul>
+    </div>
+
+    <!-- Research and Development Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">7. Research and Development Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Research and Development</li>
+            <li>Bachelor of Science in Experimental Physics</li>
+            <li>Bachelor of Science in Molecular Biology</li>
+            <li>Bachelor of Science in Biotechnology</li>
+        </ul>
+    </div>
+
+    <!-- Design and Architecture Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">8. Design and Architecture Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Fine Arts in Industrial Design</li>
+            <li>Bachelor of Science in Architecture</li>
+            <li>Bachelor of Science in Interior Design</li>
+            <li>Bachelor of Science in Landscape Architecture</li>
+        </ul>
+    </div>
+
+    <!-- Education Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">9. Education Courses (for STEM Teachers)</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Secondary Education (STEM specialization)</li>
+            <li>Bachelor of Science in Science Education</li>
+            <li>Bachelor of Science in Mathematics Education</li>
+            <li>Bachelor of Science in Engineering Education</li>
+        </ul>
+    </div>
+
+    <!-- Other Specialized Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">10. Other Specialized Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Artificial Intelligence and Machine Learning</li>
+            <li>Bachelor of Science in Quantum Computing</li>
+            <li>Bachelor of Science in Geophysics</li>
+            <li>Bachelor of Science in Environmental Engineering</li>
+            <li>Bachelor of Science in Nanotechnology</li>
+        </ul>
+    </div>
+
+    <h3 class="mt-6 text-lg font-bold">Tips for Choosing the Right Course:</h3>
+<ul class="mt-2 list-disc pl-6">
+    <li><strong>Interest and Passion:</strong> Choose a course that aligns with your interests to make your studies more enjoyable and fulfilling.</li>
+    <li><strong>Skills:</strong> STEM courses often require strong problem-solving, analytical, and technical skills. Focus on areas where you excel.</li>
+    <li><strong>Career Goals:</strong> Consider long-term career opportunities and industries that are growing, such as renewable energy, healthcare, and technology.</li>
+</ul>
+
+</div>
+
+
+        <!-- ABM Courses Section -->
+<div class="strand-section bg-white p-6 mb-6 rounded-lg shadow">
+    <h2 class="text-2xl text-blue-800">ABM (Accountancy, Business, and Management)</h2>
+    <p class="mt-4">The <strong>ABM (Accountancy, Business, and Management)</strong> strand in Senior High School is designed for students who are interested in pursuing careers in business, finance, entrepreneurship, and management. Students who complete the ABM strand typically pursue college courses that align with business and management fields.</p>
+    
+    <h3 class="text-xl mt-6">Possible College Courses for ABM Strand Students:</h3>
+
+    <!-- Accountancy and Finance Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">1. Accountancy and Finance Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Accountancy (BSA)</li>
+            <li>Bachelor of Science in Accounting Technology</li>
+            <li>Bachelor of Science in Accounting Information Systems</li>
+            <li>Bachelor of Science in Internal Auditing</li>
+            <li>Bachelor of Science in Financial Management</li>
+            <li>Bachelor of Science in Banking and Finance</li>
+            <li>Bachelor of Science in Business Administration Major in Financial Management</li>
+            <li>Bachelor of Science in Investment and Financial Economics</li>
+            <li>Bachelor of Science in Taxation</li>
+            <li>Bachelor of Science in Insurance and Risk Management</li>
+            <li>Bachelor of Science in Actuarial Science</li>
+        </ul>
+    </div>
+
+    <!-- Business and Management Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">2. Business and Management Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Business Administration (BSBA)
+                <ul class="pl-4">
+                    <li>Major in Marketing Management</li>
+                    <li>Major in Human Resource Management</li>
+                    <li>Major in Operations Management</li>
+                    <li>Major in Business Economics</li>
+                    <li>Major in Financial Management</li>
+                </ul>
+            </li>
+            <li>Bachelor of Science in Management Accounting</li>
+            <li>Bachelor of Science in Entrepreneurship</li>
+            <li>Bachelor of Science in International Business</li>
+            <li>Bachelor of Science in Business Economics</li>
+            <li>Bachelor of Science in Business Information Systems</li>
+            <li>Bachelor of Science in Logistics and Supply Chain Management</li>
+            <li>Bachelor of Science in Hospitality Management</li>
+            <li>Bachelor of Science in Real Estate Management</li>
+            <li>Bachelor of Science in Retail Management</li>
+            <li>Bachelor of Science in Tourism Management</li>
+            <li>Bachelor of Science in Event Management</li>
+            <li>Bachelor of Science in Project Management</li>
+            <li>Bachelor of Science in Agribusiness Management</li>
+            <li>Bachelor of Science in E-Commerce</li>
+        </ul>
+    </div>
+
+    <!-- Marketing and Sales Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">3. Marketing and Sales Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Marketing Management</li>
+            <li>Bachelor of Science in Advertising and Public Relations</li>
+            <li>Bachelor of Science in Sales Management</li>
+            <li>Bachelor of Science in Digital Marketing</li>
+            <li>Bachelor of Science in Media Management</li>
+            <li>Bachelor of Science in Brand Management</li>
+        </ul>
+    </div>
+
+    <!-- Entrepreneurship and Business Development Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">4. Entrepreneurship and Business Development Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Entrepreneurship</li>
+            <li>Bachelor of Science in Family Business and Entrepreneurship</li>
+            <li>Bachelor of Science in Small Business Management</li>
+            <li>Bachelor of Science in Social Entrepreneurship</li>
+            <li>Bachelor of Science in Business Development</li>
+            <li>Bachelor of Science in Innovation and Technology Management</li>
+        </ul>
+    </div>
+
+    <!-- Human Resource and Industrial Relations Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">5. Human Resource and Industrial Relations Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Human Resource Management</li>
+            <li>Bachelor of Science in Industrial Relations</li>
+            <li>Bachelor of Science in Organizational Psychology</li>
+            <li>Bachelor of Science in Labor and Employment Relations</li>
+            <li>Bachelor of Science in Personnel Management</li>
+        </ul>
+    </div>
+
+    <!-- Tourism and Hospitality Management Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">6. Tourism and Hospitality Management Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Tourism Management</li>
+            <li>Bachelor of Science in Hotel and Restaurant Management</li>
+            <li>Bachelor of Science in Travel Management</li>
+            <li>Bachelor of Science in Culinary Arts Management</li>
+            <li>Bachelor of Science in Hospitality and Restaurant Management</li>
+            <li>Bachelor of Science in Resort Management</li>
+        </ul>
+    </div>
+
+    <!-- Real Estate and Property Management Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">7. Real Estate and Property Management Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Real Estate Management</li>
+            <li>Bachelor of Science in Property Development and Management</li>
+            <li>Bachelor of Science in Real Estate Economics and Valuation</li>
+        </ul>
+    </div>
+
+    <!-- Logistics and Supply Chain Management Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">8. Logistics and Supply Chain Management Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Logistics Management</li>
+            <li>Bachelor of Science in Supply Chain Management</li>
+            <li>Bachelor of Science in Warehouse and Distribution Management</li>
+        </ul>
+    </div>
+
+    <!-- Education and Teaching Courses (Business Education) Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">9. Education and Teaching Courses (for Business Education)</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Business Education</li>
+            <li>Bachelor of Secondary Education Major in Business</li>
+            <li>Bachelor of Science in Entrepreneurship Education</li>
+        </ul>
+    </div>
+
+    <!-- Law and Legal Studies Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">10. Law and Legal Studies Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Laws (LLB)</li>
+            <li>Bachelor of Science in Legal Management</li>
+            <li>Bachelor of Science in Political Science</li>
+            <li>Bachelor of Science in Public Administration</li>
+            <li>Bachelor of Science in Criminology</li>
+        </ul>
+    </div>
+
+    <!-- Technology and Business-Related Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">11. Technology and Business-Related Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Information Technology</li>
+            <li>Bachelor of Science in Management Information Systems</li>
+            <li>Bachelor of Science in Digital Media and Communication</li>
+            <li>Bachelor of Science in Business Analytics</li>
+            <li>Bachelor of Science in E-Commerce</li>
+            <li>Bachelor of Science in Digital Business</li>
+        </ul>
+    </div>
+
+    <!-- Other Specialized Business Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">12. Other Specialized Business Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Agricultural Economics</li>
+            <li>Bachelor of Science in International Trade and Development</li>
+            <li>Bachelor of Science in Social Media Management</li>
+            <li>Bachelor of Science in Non-Profit Management</li>
+            <li>Bachelor of Science in Corporate Communication</li>
+            <li>Bachelor of Science in Corporate Social Responsibility (CSR)</li>
+            <li>Bachelor of Science in Environmental Management</li>
+        </ul>
+    </div>
+
+    <!-- Graduate-Level Business Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">13. Graduate-Level Business Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Master of Business Administration (MBA)</li>
+            <li>Master of Science in Accounting</li>
+            <li>Master of Science in Business Analytics</li>
+            <li>Master of Science in Finance</li>
+            <li>Master of Science in Entrepreneurship</li>
+            <li>Master of Science in Marketing</li>
+            <li>Master of Science in Human Resource Management</li>
+        </ul>
+    </div>
+    <h3 class="mt-6 text-lg font-bold">Tips for Choosing the Right Course:</h3>
+    <ul class="mt-2 list-disc pl-6">
+        <li><strong>Interest and Passion:</strong> Choose a course that excites you to make your studies more enjoyable.</li>
+        <li><strong>Skills:</strong> Focus on courses that match your strengths in areas like analysis, numbers, or creativity.</li>
+        <li><strong>Career Goals:</strong> Think about your future career—whether you want to work in business, finance, or entrepreneurship.</li>
+    </ul>
+</div>
+
+<!-- HUMSS Courses Section -->
+<div class="strand-section bg-white p-6 mb-6 rounded-lg shadow">
+    <h2 class="text-2xl text-blue-800">HUMSS (Humanities and Social Sciences)</h2>
+    <p class="mt-4">The <strong>HUMSS (Humanities and Social Sciences)</strong> strand is designed for students interested in fields related to the arts, culture, communication, social work, law, and teaching. HUMSS students typically pursue college courses that align with their strengths in critical thinking, communication, and understanding human behavior.</p>
+    
+    <h3 class="text-xl mt-6">Possible College Courses for HUMSS Strand Students:</h3>
+
+    <!-- Social Sciences Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">1. Social Sciences Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Arts in Political Science</li>
+            <li>Bachelor of Science in Psychology</li>
+            <li>Bachelor of Science in Social Work</li>
+            <li>Bachelor of Science in Sociology</li>
+            <li>Bachelor of Science in Anthropology</li>
+            <li>Bachelor of Science in Criminology</li>
+            <li>Bachelor of Arts in Economics</li>
+            <li>Bachelor of Arts in Philosophy</li>
+            <li>Bachelor of Arts in International Studies</li>
+            <li>Bachelor of Science in Public Administration</li>
+            <li>Bachelor of Arts in Peace and Conflict Studies</li>
+            <li>Bachelor of Science in Community Development</li>
+            <li>Bachelor of Science in Environmental Studies</li>
+            <li>Bachelor of Arts in History</li>
+            <li>Bachelor of Arts in Gender Studies</li>
+        </ul>
+    </div>
+
+    <!-- Education and Teaching Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">2. Education and Teaching Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Elementary Education (BEEd)</li>
+            <li>Bachelor of Secondary Education (BSEd) - Major in English, Social Studies, Filipino, Special Education, Science, Mathematics</li>
+            <li>Bachelor of Arts in Education (ABEd)</li>
+            <li>Bachelor of Arts in Child Development and Education</li>
+            <li>Bachelor of Science in Guidance and Counseling</li>
+            <li>Bachelor of Science in Library and Information Science</li>
+            <li>Bachelor of Science in Physical Education</li>
+            <li>Bachelor of Special Education (BSEd-SPED)</li>
+        </ul>
+    </div>
+
+    <!-- Law and Legal Studies Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">3. Law and Legal Studies Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Laws (LLB)</li>
+            <li>Bachelor of Arts in Legal Management</li>
+            <li>Bachelor of Science in Political Science (Pre-Law)</li>
+            <li>Bachelor of Science in Criminology</li>
+            <li>Bachelor of Science in Public Administration</li>
+            <li>Bachelor of Science in International Relations</li>
+            <li>Bachelor of Science in Maritime Law and Management</li>
+            <li>Bachelor of Arts in Paralegal Studies</li>
+            <li>Bachelor of Science in Forensic Science</li>
+            <li>Bachelor of Arts in Philosophy (Pre-Law)</li>
+        </ul>
+    </div>
+
+    <!-- Communication and Media Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">4. Communication and Media Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Arts in Communication</li>
+            <li>Bachelor of Arts in Journalism</li>
+            <li>Bachelor of Science in Broadcast Communication</li>
+            <li>Bachelor of Arts in Advertising and Public Relations</li>
+            <li>Bachelor of Arts in Film and Television Production</li>
+            <li>Bachelor of Arts in Multimedia Arts</li>
+            <li>Bachelor of Arts in Public Relations</li>
+            <li>Bachelor of Arts in Digital Media</li>
+            <li>Bachelor of Arts in Visual Communication</li>
+            <li>Bachelor of Arts in Digital Journalism</li>
+            <li>Bachelor of Science in Mass Communication</li>
+            <li>Bachelor of Arts in Speech Communication</li>
+            <li>Bachelor of Arts in Creative Writing</li>
+        </ul>
+    </div>
+
+    <!-- Humanities and Arts Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">5. Humanities and Arts Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Arts in English</li>
+            <li>Bachelor of Arts in Literature</li>
+            <li>Bachelor of Fine Arts (BFA) - Major in Painting, Sculpture, Visual Communication</li>
+            <li>Bachelor of Arts in History</li>
+            <li>Bachelor of Arts in Philosophy</li>
+            <li>Bachelor of Arts in Language and Literature</li>
+            <li>Bachelor of Arts in Theater Arts</li>
+            <li>Bachelor of Arts in Music</li>
+            <li>Bachelor of Arts in Dance</li>
+            <li>Bachelor of Arts in Creative Writing</li>
+            <li>Bachelor of Arts in Art History</li>
+            <li>Bachelor of Arts in Cultural Studies</li>
+            <li>Bachelor of Arts in Religious Studies</li>
+        </ul>
+    </div>
+
+    <h3 class="mt-6 text-lg font-bold">Tips for Choosing the Right Course:</h3>
+    <ul class="mt-2 list-disc pl-6">
+        <li><strong>Interest and Passion:</strong> Choose a course that excites you, whether it’s in law, education, or the arts.</li>
+        <li><strong>Skills:</strong> Focus on courses that match your strengths in communication, creativity, or analysis.</li>
+        <li><strong>Career Goals:</strong> Think about your long-term career goals, such as becoming a teacher, lawyer, or journalist.</li>
+    </ul>
+</div>
+
+        <!-- GAS Courses Section -->
+<div class="strand-section bg-white p-6 mb-6 rounded-lg shadow">
+    <h2 class="text-2xl text-blue-800">GAS (General Academic Strand)</h2>
+    <p class="mt-4">The <strong>General Academic Strand (GAS)</strong> is a versatile strand in Senior High School that provides students with an academic foundation across different disciplines, such as business, humanities, and social sciences. Students in GAS are not limited to a specific career path, and this allows them to choose from a wide range of college courses in various fields.</p>
+    
+    <h3 class="text-xl mt-6">Possible College Courses for GAS Strand Students:</h3>
+
+    <!-- Business and Management Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">1. Business and Management Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Business Administration (BSBA)</li>
+            <li>Bachelor of Science in Accountancy</li>
+            <li>Bachelor of Science in Management Accounting</li>
+            <li>Bachelor of Science in Entrepreneurship</li>
+            <li>Bachelor of Science in Business Analytics</li>
+            <li>Bachelor of Science in Tourism Management</li>
+            <li>Bachelor of Science in Hospitality Management</li>
+            <li>Bachelor of Science in Travel Management</li>
+            <li>Bachelor of Science in Real Estate Management</li>
+            <li>Bachelor of Science in Retail Management</li>
+        </ul>
+    </div>
+
+    <!-- Communication and Media Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">2. Communication and Media Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Arts in Communication</li>
+            <li>Bachelor of Science in Mass Communication</li>
+            <li>Bachelor of Arts in Journalism</li>
+            <li>Bachelor of Science in Broadcast Communication</li>
+            <li>Bachelor of Science in Advertising</li>
+            <li>Bachelor of Arts in Public Relations</li>
+            <li>Bachelor of Arts in Digital Media</li>
+            <li>Bachelor of Arts in Multimedia Arts</li>
+            <li>Bachelor of Science in Film and Television Production</li>
+        </ul>
+    </div>
+
+    <!-- Humanities and Social Sciences Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">3. Humanities and Social Sciences Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Arts in Political Science</li>
+            <li>Bachelor of Arts in International Studies</li>
+            <li>Bachelor of Science in Psychology</li>
+            <li>Bachelor of Arts in Sociology</li>
+            <li>Bachelor of Science in Social Work</li>
+            <li>Bachelor of Arts in Philosophy</li>
+            <li>Bachelor of Arts in History</li>
+            <li>Bachelor of Science in Criminology</li>
+            <li>Bachelor of Arts in Development Studies</li>
+            <li>Bachelor of Arts in Peace and Conflict Studies</li>
+        </ul>
+    </div>
+
+    <!-- Law and Legal Studies Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">4. Law and Legal Studies Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Laws (LLB)</li>
+            <li>Bachelor of Arts in Legal Management</li>
+            <li>Bachelor of Science in Criminal Justice</li>
+            <li>Bachelor of Science in Forensic Science</li>
+            <li>Bachelor of Science in Public Safety</li>
+            <li>Bachelor of Science in Paralegal Studies</li>
+        </ul>
+    </div>
+
+    <!-- Education and Teaching Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">5. Education and Teaching Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Elementary Education (BEEd)</li>
+            <li>Bachelor of Secondary Education (BSEd)</li>
+            <li>Bachelor of Arts in Special Education</li>
+            <li>Bachelor of Science in Library and Information Science</li>
+            <li>Bachelor of Science in Guidance and Counseling</li>
+        </ul>
+    </div>
+
+    <!-- Health and Allied Health Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">6. Health and Allied Health Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Nursing</li>
+            <li>Bachelor of Science in Pharmacy</li>
+            <li>Bachelor of Science in Physical Therapy</li>
+            <li>Bachelor of Science in Occupational Therapy</li>
+            <li>Bachelor of Science in Medical Technology</li>
+            <li>Bachelor of Science in Radiologic Technology</li>
+            <li>Bachelor of Science in Nutrition and Dietetics</li>
+        </ul>
+    </div>
+
+    <!-- Information Technology and Computer Science Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">7. Information Technology and Computer Science Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Information Technology</li>
+            <li>Bachelor of Science in Computer Science</li>
+            <li>Bachelor of Science in Software Engineering</li>
+            <li>Bachelor of Science in Cybersecurity</li>
+            <li>Bachelor of Science in Web Development</li>
+            <li>Bachelor of Science in Information Systems</li>
+            <li>Bachelor of Science in Data Science</li>
+        </ul>
+    </div>
+
+    <!-- Arts, Design, and Creative Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">8. Arts, Design, and Creative Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Fine Arts (BFA)</li>
+            <li>Bachelor of Arts in Multimedia Arts</li>
+            <li>Bachelor of Arts in Graphic Design</li>
+            <li>Bachelor of Arts in Animation</li>
+            <li>Bachelor of Arts in Fashion Design</li>
+            <li>Bachelor of Arts in Interior Design</li>
+            <li>Bachelor of Arts in Digital Arts</li>
+            <li>Bachelor of Arts in Industrial Design</li>
+            <li>Bachelor of Arts in Architecture</li>
+        </ul>
+    </div>
+
+    <!-- Agricultural and Environmental Science Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">9. Agricultural and Environmental Science Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Agriculture</li>
+            <li>Bachelor of Science in Environmental Science</li>
+            <li>Bachelor of Science in Agricultural Economics</li>
+            <li>Bachelor of Science in Forestry</li>
+            <li>Bachelor of Science in Fisheries</li>
+            <li>Bachelor of Science in Food Technology</li>
+        </ul>
+    </div>
+
+    <!-- Engineering and Technology Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">10. Engineering and Technology Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Civil Engineering</li>
+            <li>Bachelor of Science in Mechanical Engineering</li>
+            <li>Bachelor of Science in Electrical Engineering</li>
+            <li>Bachelor of Science in Industrial Engineering</li>
+            <li>Bachelor of Science in Computer Engineering</li>
+        </ul>
+    </div>
+
+    <!-- Other Courses Dropdown -->
+    <div class="mt-4">
+        <button class="dropdown-toggle w-full text-left bg-gray-200 text-black p-2 rounded-md">11. Other Courses</button>
+        <ul class="dropdown-content hidden list-disc pl-8 mt-2">
+            <li>Bachelor of Science in Architecture</li>
+            <li>Bachelor of Science in Urban and Regional Planning</li>
+            <li>Bachelor of Science in Maritime Studies</li>
+            <li>Bachelor of Science in Tourism and Hospitality Management</li>
+            <li>Bachelor of Arts in International Relations</li>
+            <li>Bachelor of Science in Family and Child Studies</li>
+            <li>Bachelor of Arts in Public Administration</li>
+        </ul>
+    </div>
+    
+    <!-- Tips for GAS Students -->
+<h3 class="mt-6 text-xl">Tips for Choosing the Right Course:</h3>
+<ul class="list-disc pl-8 mt-2">
+    <li><strong>Interest and Passion:</strong> Choose a course that excites you to stay motivated and engaged.</li>
+    <li><strong>Skills:</strong> Select a course that aligns with your strengths, whether in communication, analysis, or problem-solving.</li>
+    <li><strong>Career Goals:</strong> Consider your long-term career goals and choose a course that supports them.</li>
+</ul>
+
+</div>
+
+    <script>
+        // Toggle dropdown visibility
+        document.querySelectorAll('.dropdown-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                button.nextElementSibling.classList.toggle('hidden');
+            });
+        });
+    </script>
+
+<footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-0 w-full">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+        <div class="sm:flex sm:items-center sm:justify-between">
+            <a class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+                <img src="./PathMatchLOGO.png" class="h-8" alt="PathMatchLOGO" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">PathMatch</span>
+            </a>
+            <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+                <li>
+                    <a href="https://www.facebook.com/parantarnat" target="_blank" class="text-2xl font-semibold py-3 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 Kim Nathaniel Parantar. All Rights Reserved.</span>
+    </div>
+</footer>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    <script>
+        var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Change the icons inside the button based on previous settings
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        var themeToggleBtn = document.getElementById('theme-toggle');
+
+        themeToggleBtn.addEventListener('click', function() {
+
+            // toggle icons inside button
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            // if set via local storage previously
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+
+            // if NOT set via local storage previously
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
